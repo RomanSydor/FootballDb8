@@ -19,45 +19,38 @@ namespace FootballDb8
                 try
                 {
                     ConsoleTable table;
-                    Console.Write("\nQuery-> ");
+                    Console.Write($"\n[{connection.Database.ToString()}]-> ");
                     sql = Console.ReadLine();
 
                     MySqlCommand command = new MySqlCommand(sql, connection);
                     MySqlDataReader reader = command.ExecuteReader();
-                    if (reader.FieldCount == 1)
-                    {
-                        table = new ConsoleTable(" ");
-                        while (reader.Read())
-                        {
-                            table.AddRow(reader[0]);
-                        }
-                        Console.WriteLine(table);
-                    }
-                    if (reader.FieldCount == 6)
-                    {
-                        table = new ConsoleTable(" ", " ", " ", " ", " ", " ");
 
-                        while (reader.Read())
-                        {
-                            table.AddRow(reader[0], reader[1], reader[2], reader[3], reader[4], reader[5]);
-                        }
-                        Console.WriteLine(table);
-                    }
-                    if (reader.FieldCount == 7)
-                    {
-                        table = new ConsoleTable(" ", " ", " ", " ", " ", " ", " ");
+                    int fieldCount = reader.FieldCount;
+                    object[] fields = new object[fieldCount];
+                    string[] columns = new string[fieldCount];
 
-                        while (reader.Read())
-                        {
-                            table.AddRow(reader[0], reader[1], reader[2], reader[3], reader[4], reader[5], reader[6]);
-                        }
-                        Console.WriteLine(table);
+                    for (int i = 0; i < fieldCount; i++)
+                    {
+                        columns[i] = reader.GetName(i);
                     }
+                    table = new ConsoleTable(columns);
+
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < fieldCount; i++)
+                        {
+                            fields[i] = reader[i];
+                        }
+                        var copy = new object[fieldCount];
+                        Array.Copy(fields, copy, fieldCount);
+                        table.AddRow(copy);
+                    }
+                    Console.WriteLine(table);
                     reader.Close();
                 }
                 catch (Exception ex)
                 {
-                    if (sql == "" || sql == " " || sql == "  ")
+                    if (sql == "")
                     {
                         Console.Write("");
                     }
