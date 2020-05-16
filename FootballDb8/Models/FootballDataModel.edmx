@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="lab2dbModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="clubs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Town" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Country" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Coach" Type="varchar" MaxLength="100" />
+          <Property Name="Stadium" Type="int" />
+          <Property Name="Players" Type="char" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="gameschedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="date" />
+          <Property Name="Time" Type="time" Precision="0" />
+          <Property Name="stadium" Type="int" />
+          <Property Name="HomeTeam" Type="int" />
+          <Property Name="AwayTeam" Type="int" />
+          <Property Name="Score" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="players">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Surname" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Age" Type="int" Nullable="false" />
+          <Property Name="Nationality" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Position" Type="varchar" MaxLength="100" />
+          <Property Name="Club" Type="int" />
+        </EntityType>
+        <EntityType Name="stadiums">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Town" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Country" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Capacity" Type="int" />
+          <Property Name="TypeOfLawn" Type="varchar" MaxLength="100" />
+          <Property Name="ClubOwner" Type="int" />
+        </EntityType>
+        <Association Name="clubs_ibfk_2">
+          <End Role="stadiums" Type="Self.stadiums" Multiplicity="0..1" />
+          <End Role="clubs" Type="Self.clubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stadiums">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="clubs">
+              <PropertyRef Name="Stadium" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="gameschedule_ibfk_1">
+          <End Role="stadiums" Type="Self.stadiums" Multiplicity="0..1" />
+          <End Role="gameschedule" Type="Self.gameschedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stadiums">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="gameschedule">
+              <PropertyRef Name="stadium" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="gameschedule_ibfk_2">
+          <End Role="clubs" Type="Self.clubs" Multiplicity="0..1" />
+          <End Role="gameschedule" Type="Self.gameschedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clubs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="gameschedule">
+              <PropertyRef Name="HomeTeam" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="gameschedule_ibfk_3">
+          <End Role="clubs" Type="Self.clubs" Multiplicity="0..1" />
+          <End Role="gameschedule" Type="Self.gameschedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clubs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="gameschedule">
+              <PropertyRef Name="AwayTeam" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="players_ibfk_1">
+          <End Role="clubs" Type="Self.clubs" Multiplicity="0..1" />
+          <End Role="players" Type="Self.players" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clubs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="players">
+              <PropertyRef Name="Club" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="stadiums_ibfk_1">
+          <End Role="clubs" Type="Self.clubs" Multiplicity="0..1" />
+          <End Role="stadiums" Type="Self.stadiums" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clubs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="stadiums">
+              <PropertyRef Name="ClubOwner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="lab2dbModelStoreContainer">
+          <EntitySet Name="clubs" EntityType="Self.clubs" Schema="lab2db" store:Type="Tables" />
+          <EntitySet Name="gameschedule" EntityType="Self.gameschedule" Schema="lab2db" store:Type="Tables" />
+          <EntitySet Name="players" EntityType="Self.players" Schema="lab2db" store:Type="Tables" />
+          <EntitySet Name="stadiums" EntityType="Self.stadiums" Schema="lab2db" store:Type="Tables" />
+          <AssociationSet Name="clubs_ibfk_2" Association="Self.clubs_ibfk_2">
+            <End Role="stadiums" EntitySet="stadiums" />
+            <End Role="clubs" EntitySet="clubs" />
+          </AssociationSet>
+          <AssociationSet Name="gameschedule_ibfk_1" Association="Self.gameschedule_ibfk_1">
+            <End Role="stadiums" EntitySet="stadiums" />
+            <End Role="gameschedule" EntitySet="gameschedule" />
+          </AssociationSet>
+          <AssociationSet Name="gameschedule_ibfk_2" Association="Self.gameschedule_ibfk_2">
+            <End Role="clubs" EntitySet="clubs" />
+            <End Role="gameschedule" EntitySet="gameschedule" />
+          </AssociationSet>
+          <AssociationSet Name="gameschedule_ibfk_3" Association="Self.gameschedule_ibfk_3">
+            <End Role="clubs" EntitySet="clubs" />
+            <End Role="gameschedule" EntitySet="gameschedule" />
+          </AssociationSet>
+          <AssociationSet Name="players_ibfk_1" Association="Self.players_ibfk_1">
+            <End Role="clubs" EntitySet="clubs" />
+            <End Role="players" EntitySet="players" />
+          </AssociationSet>
+          <AssociationSet Name="stadiums_ibfk_1" Association="Self.stadiums_ibfk_1">
+            <End Role="clubs" EntitySet="clubs" />
+            <End Role="stadiums" EntitySet="stadiums" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="lab2dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="clubs">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Town" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Coach" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Stadium" Type="Int32" />
+          <Property Name="Players" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="stadiums" Relationship="Self.clubs_ibfk_2" FromRole="clubs" ToRole="stadiums" />
+          <NavigationProperty Name="gameschedule" Relationship="Self.gameschedule_ibfk_2" FromRole="clubs" ToRole="gameschedule" />
+          <NavigationProperty Name="gameschedule1" Relationship="Self.gameschedule_ibfk_3" FromRole="clubs" ToRole="gameschedule" />
+          <NavigationProperty Name="players1" Relationship="Self.players_ibfk_1" FromRole="clubs" ToRole="players" />
+          <NavigationProperty Name="stadiums1" Relationship="Self.stadiums_ibfk_1" FromRole="clubs" ToRole="stadiums" />
+        </EntityType>
+        <EntityType Name="gameschedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" />
+          <Property Name="Time" Type="Time" />
+          <Property Name="stadium" Type="Int32" />
+          <Property Name="HomeTeam" Type="Int32" />
+          <Property Name="AwayTeam" Type="Int32" />
+          <Property Name="Score" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="clubs" Relationship="Self.gameschedule_ibfk_2" FromRole="gameschedule" ToRole="clubs" />
+          <NavigationProperty Name="clubs1" Relationship="Self.gameschedule_ibfk_3" FromRole="gameschedule" ToRole="clubs" />
+          <NavigationProperty Name="stadiums" Relationship="Self.gameschedule_ibfk_1" FromRole="gameschedule" ToRole="stadiums" />
+        </EntityType>
+        <EntityType Name="players">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Age" Type="Int32" Nullable="false" />
+          <Property Name="Nationality" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Club" Type="Int32" />
+          <NavigationProperty Name="clubs" Relationship="Self.players_ibfk_1" FromRole="players" ToRole="clubs" />
+        </EntityType>
+        <EntityType Name="stadiums">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Town" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Capacity" Type="Int32" />
+          <Property Name="TypeOfLawn" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ClubOwner" Type="Int32" />
+          <NavigationProperty Name="clubs" Relationship="Self.clubs_ibfk_2" FromRole="stadiums" ToRole="clubs" />
+          <NavigationProperty Name="clubs1" Relationship="Self.stadiums_ibfk_1" FromRole="stadiums" ToRole="clubs" />
+          <NavigationProperty Name="gameschedule" Relationship="Self.gameschedule_ibfk_1" FromRole="stadiums" ToRole="gameschedule" />
+        </EntityType>
+        <Association Name="clubs_ibfk_2">
+          <End Role="stadiums" Type="Self.stadiums" Multiplicity="0..1" />
+          <End Role="clubs" Type="Self.clubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stadiums">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="clubs">
+              <PropertyRef Name="Stadium" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="gameschedule_ibfk_2">
+          <End Role="clubs" Type="Self.clubs" Multiplicity="0..1" />
+          <End Role="gameschedule" Type="Self.gameschedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clubs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="gameschedule">
+              <PropertyRef Name="HomeTeam" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="gameschedule_ibfk_3">
+          <End Role="clubs" Type="Self.clubs" Multiplicity="0..1" />
+          <End Role="gameschedule" Type="Self.gameschedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clubs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="gameschedule">
+              <PropertyRef Name="AwayTeam" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="players_ibfk_1">
+          <End Role="clubs" Type="Self.clubs" Multiplicity="0..1" />
+          <End Role="players" Type="Self.players" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clubs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="players">
+              <PropertyRef Name="Club" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="stadiums_ibfk_1">
+          <End Role="clubs" Type="Self.clubs" Multiplicity="0..1" />
+          <End Role="stadiums" Type="Self.stadiums" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="clubs">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="stadiums">
+              <PropertyRef Name="ClubOwner" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="gameschedule_ibfk_1">
+          <End Role="stadiums" Type="Self.stadiums" Multiplicity="0..1" />
+          <End Role="gameschedule" Type="Self.gameschedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="stadiums">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="gameschedule">
+              <PropertyRef Name="stadium" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="lab2dbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="clubs" EntityType="Self.clubs" />
+          <EntitySet Name="gameschedule" EntityType="Self.gameschedule" />
+          <EntitySet Name="players" EntityType="Self.players" />
+          <EntitySet Name="stadiums" EntityType="Self.stadiums" />
+          <AssociationSet Name="clubs_ibfk_2" Association="Self.clubs_ibfk_2">
+            <End Role="stadiums" EntitySet="stadiums" />
+            <End Role="clubs" EntitySet="clubs" />
+          </AssociationSet>
+          <AssociationSet Name="gameschedule_ibfk_2" Association="Self.gameschedule_ibfk_2">
+            <End Role="clubs" EntitySet="clubs" />
+            <End Role="gameschedule" EntitySet="gameschedule" />
+          </AssociationSet>
+          <AssociationSet Name="gameschedule_ibfk_3" Association="Self.gameschedule_ibfk_3">
+            <End Role="clubs" EntitySet="clubs" />
+            <End Role="gameschedule" EntitySet="gameschedule" />
+          </AssociationSet>
+          <AssociationSet Name="players_ibfk_1" Association="Self.players_ibfk_1">
+            <End Role="clubs" EntitySet="clubs" />
+            <End Role="players" EntitySet="players" />
+          </AssociationSet>
+          <AssociationSet Name="stadiums_ibfk_1" Association="Self.stadiums_ibfk_1">
+            <End Role="clubs" EntitySet="clubs" />
+            <End Role="stadiums" EntitySet="stadiums" />
+          </AssociationSet>
+          <AssociationSet Name="gameschedule_ibfk_1" Association="Self.gameschedule_ibfk_1">
+            <End Role="stadiums" EntitySet="stadiums" />
+            <End Role="gameschedule" EntitySet="gameschedule" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="lab2dbModelStoreContainer" CdmEntityContainer="lab2dbEntities">
+          <EntitySetMapping Name="clubs">
+            <EntityTypeMapping TypeName="lab2dbModel.clubs">
+              <MappingFragment StoreEntitySet="clubs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Town" ColumnName="Town" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Coach" ColumnName="Coach" />
+                <ScalarProperty Name="Stadium" ColumnName="Stadium" />
+                <ScalarProperty Name="Players" ColumnName="Players" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="gameschedule">
+            <EntityTypeMapping TypeName="lab2dbModel.gameschedule">
+              <MappingFragment StoreEntitySet="gameschedule">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="stadium" ColumnName="stadium" />
+                <ScalarProperty Name="HomeTeam" ColumnName="HomeTeam" />
+                <ScalarProperty Name="AwayTeam" ColumnName="AwayTeam" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="players">
+            <EntityTypeMapping TypeName="lab2dbModel.players">
+              <MappingFragment StoreEntitySet="players">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Nationality" ColumnName="Nationality" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Club" ColumnName="Club" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="stadiums">
+            <EntityTypeMapping TypeName="lab2dbModel.stadiums">
+              <MappingFragment StoreEntitySet="stadiums">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Town" ColumnName="Town" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+                <ScalarProperty Name="TypeOfLawn" ColumnName="TypeOfLawn" />
+                <ScalarProperty Name="ClubOwner" ColumnName="ClubOwner" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
